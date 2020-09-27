@@ -1,17 +1,22 @@
 #include <stdio.h>
 
-#define MAXLENGTH 1000
-int TABLENGTH = 9;
-#define DBGSTR(y) printf("char %d\n", y);
+#define MAXLENGTH 1000	// Max length of document accepted
+int TABLENGTH = 4;	// # spaces substituted for tab
 
 int replaceTab(int document[], int * documentLength, int tabIndex);
 
 int main(int argc, char * argv[]) {
-	extern int TABLENGTH;
-	if(argc > 1) TABLENGTH = *argv[1];
-	
-	
+	extern int TABLENGTH;	// I know, but it's good practice
 
+	if(argc > 1) {	// Parse any CML arguments passed to declare the TABLENGTH
+		TABLENGTH = 0;
+		for(char * i = argv[1]; *i != 0; ++i) {
+			TABLENGTH *= 10;
+			TABLENGTH += (*i - 48);
+		}
+	}
+	
+	// Declarations
 	int document[MAXLENGTH];
 	int character;
 	int documentLength = 0;
@@ -33,18 +38,16 @@ int main(int argc, char * argv[]) {
 
 int replaceTab(int document[], int * documentLength, int tabIndex) {
 	extern int TABLENGTH;
-	printf("TABLENGTH: %d", TABLENGTH);
-	int var = 3;
-	for(int rightShiftIndex = *documentLength + var - 1; rightShiftIndex > tabIndex + var - 1; --rightShiftIndex) {
+	for(int rightShiftIndex = *documentLength + TABLENGTH - 1; rightShiftIndex > tabIndex + TABLENGTH - 1; --rightShiftIndex) {
 		if(rightShiftIndex > MAXLENGTH) return 1;	// If overflowing document MAXLENGTH, return error flag
-		document[rightShiftIndex] = document[rightShiftIndex - var + 1];	// Shift document characters after (tabIndex + TABLENGTH) to the right by one TABLENGTH
+		document[rightShiftIndex] = document[rightShiftIndex - TABLENGTH + 1];	// Shift document characters after (tabIndex + TABLENGTH) to the right by one TABLENGTH
 	}
 	
-	for(int documentIndex = tabIndex; documentIndex < tabIndex + var; ++documentIndex) {
+	for(int documentIndex = tabIndex; documentIndex < tabIndex + TABLENGTH; ++documentIndex) {
 		document[documentIndex] = ' ';
 	}
 	
-	(*documentLength) += (var - 1);
+	(*documentLength) += (TABLENGTH - 1);
 	
 	return 0;
 }
