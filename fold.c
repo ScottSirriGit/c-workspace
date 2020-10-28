@@ -14,7 +14,6 @@ int main(int argc, char * argv[]) {
 			LINEWIDTH += *(argv[2] + i) - 48;
 		}
 	}
-	printf("LINEWIDTH: %d\n", LINEWIDTH);
 	int inputLength;
 	char input[MAXLENGTH];
 	copyToLength(argv[1], input, &inputLength);
@@ -41,7 +40,7 @@ int main(int argc, char * argv[]) {
 			++numLines;
 		}
 	}
-	printf("\n%s\n", input);
+	printf("\n%s\n\n", input);
 }
 
 char * copyToLength(char * array, char * out, int * outputLength) {
